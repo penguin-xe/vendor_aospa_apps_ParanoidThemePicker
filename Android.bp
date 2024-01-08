@@ -71,14 +71,13 @@ android_app {
         "hilt_android",
         "monet",
         "renderscript_toolkit",
-        "wallpaper-common-deps",
+        "WallpaperPicker2Lib",
         "SettingsLibSettingsTheme",
         "SystemUI-statsd",
         "styleprotoslite",
     ],
 
     srcs: [
-        ":WallpaperPicker2_srcs",
         ":ThemePicker_srcs",
         ":ParanoidThemePicker_srcs",
         "src_override/**/*.java",
@@ -91,7 +90,7 @@ android_app {
 
     use_embedded_native_libs: true,
 
-    resource_zips: [":WallpaperPicker2_res", ":ThemePicker_res", ":ParanoidThemePicker_res", ":ParanoidThemePicker_res_overrides"],
+    resource_zips: [":ThemePicker_res", ":ParanoidThemePicker_res", ":ParanoidThemePicker_res_overrides"],
 
     optimize: {
         enabled: false,
