@@ -21,11 +21,15 @@ license {
     ],
 }
 
-filegroup {
-    name: "ParanoidThemePicker_srcs",
+java_library {
+    name: "ParanoidThemePickerOverridesLib",
     srcs: [
-        "src/**/*.java",
-        "src/**/*.kt",
+        "src_override/**/*.java",
+        "src_override/**/*.kt",
+    ],
+    libs: [
+        "hilt_android",
+        "ParanoidThemePickerLib",
     ],
 }
 
@@ -36,61 +40,56 @@ filegroup {
     ],
 }
 
-genrule {
-    name: "ParanoidThemePicker_res",
-    tools: ["soong_zip"],
-    srcs: [
-        "res/**/*"
-    ],
-    out: ["ParanoidThemePicker_res.zip"],
-    cmd: "INPUTS=($(in)) && "
-        + "RES_DIR=$$(dirname $$(dirname $${INPUTS[0]})) && "
-        + "$(location soong_zip) -o $(out) -C $$RES_DIR -D $$RES_DIR"
-}
-
-genrule {
-    name: "ParanoidThemePicker_res_overrides",
-    tools: ["soong_zip"],
-    srcs: [
-        "res_override/**/*",
-    ],
-    out: ["ThemePicker_res_overrides.zip"],
-    cmd: "INPUTS=($(in)) && "
-        + "RES_DIR=$$(dirname $$(dirname $${INPUTS[0]})) && "
-        + "$(location soong_zip) -o $(out) -C $$RES_DIR -D $$RES_DIR"
-}
-
-//
-// Build app code.
-//
-android_app {
-    name: "ParanoidThemePicker",
+android_library {
+    name: "ParanoidThemePickerLib",
 
     static_libs: [
         "guava",
-        "hilt_android",
         "monet",
         "renderscript_toolkit",
+        "ThemePickerLib",
         "WallpaperPicker2Lib",
         "SettingsLibSettingsTheme",
         "SystemUI-statsd",
         "styleprotoslite",
+        "androidx.lifecycle_lifecycle-livedata-ktx",
+        "androidx.lifecycle_lifecycle-runtime-ktx",
+        "androidx.lifecycle_lifecycle-viewmodel-ktx",
+        "androidx.recyclerview_recyclerview",
+        "SystemUICustomizationLib",
+        "hilt_android",
     ],
 
     srcs: [
-        ":ThemePicker_srcs",
-        ":ParanoidThemePicker_srcs",
-        "src_override/**/*.java",
-        "src_override/**/*.kt",
+        "src/**/*.java",
+        "src/**/*.kt",
+    ],
+
+    resource_dirs: [
+        "res",
+        "res_override",
+    ],
+
+    manifest: "AndroidManifest-empty.xml",
+}
+
+java_defaults {
+    name: "ParanoidThemePicker_defaults",
+    static_libs: [
+        "ThemePickerLib",
+        "ParanoidThemePickerLib",
+        "ThemePickerOverridesLib",
+        "ParanoidThemePickerOverridesLib",
+        "hilt_android",
     ],
 
     jni_libs: [
         "librenderscript-toolkit",
     ],
 
-    use_embedded_native_libs: true,
+    required: ["android.software.theme_picker.xml"],
 
-    resource_zips: [":ThemePicker_res", ":ParanoidThemePicker_res", ":ParanoidThemePicker_res_overrides"],
+    use_embedded_native_libs: true,
 
     optimize: {
         enabled: false,
@@ -100,27 +99,24 @@ android_app {
 
     privileged: true,
     system_ext_specific: true,
+}
+
+//
+// Build app code.
+//
+android_app {
+    name: "ParanoidThemePicker",
+    defaults: ["ParanoidThemePicker_defaults"],
+
     platform_apis: true,
     manifest: "AndroidManifest.xml",
     additional_manifests: [":WallpaperPicker2_Manifest", ":ThemePicker_Manifest"],
-
-    overrides: ["ThemePicker", "WallpaperPicker2", "WallpaperPicker"],
-
+    overrides: ["WallpaperPicker", "WallpaperPicker2", "ThemePicker"],
     required: [
         "privapp_whitelist_com.android.wallpaper",
         "default_permissions_com.android.wallpaper",
         "ParanoidColorStub",
     ],
-}
-
-android_app {
-    name: "ParanoidColorStub",
-    manifest: "AndroidManifest-Stub.xml",
-    resource_dirs: ["res-stub"],
-
-    certificate: "platform",
-    product_specific: true,
-    sdk_version: "current",
 }
 
 prebuilt_etc {
@@ -137,4 +133,14 @@ prebuilt_etc_xml {
     system_ext_specific: true,
     filename_from_src: true,
     sub_dir: "default-permissions",
+}
+
+android_app {
+    name: "ParanoidColorStub",
+    manifest: "AndroidManifest-Stub.xml",
+    resource_dirs: ["res-stub"],
+
+    certificate: "platform",
+    product_specific: true,
+    sdk_version: "current",
 }
