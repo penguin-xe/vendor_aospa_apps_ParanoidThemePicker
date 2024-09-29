@@ -32,14 +32,14 @@ import com.android.customization.model.CustomizationManager.Callback;
 import com.android.customization.model.CustomizationManager.OptionsFetchedListener;
 import com.android.customization.model.CustomizationOption;
 import com.android.customization.model.theme.OverlayManagerCompat;
-import com.android.customization.widget.OptionSelectorController;
-import com.android.customization.widget.OptionSelectorController.CheckmarkStyle;
 import com.android.wallpaper.R;
 import com.android.wallpaper.picker.AppbarFragment;
 import com.android.wallpaper.widget.BottomActionBar;
 
 import co.aospa.android.customization.model.iconshape.IconShapeOption;
 import co.aospa.android.customization.model.iconshape.IconShapeManager;
+import co.aospa.android.customization.widget.OptionSelectorController;
+import co.aospa.android.customization.widget.OptionSelectorController.CheckmarkStyle;
 
 import java.util.List;
 
