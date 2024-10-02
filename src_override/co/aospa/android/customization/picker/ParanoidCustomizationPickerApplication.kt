@@ -2,15 +2,15 @@ package co.aospa.android.customization.picker
 
 import android.app.Application;
 import com.android.wallpaper.module.InjectorProvider;
-import co.aospa.android.customization.module.AospaThemePickerInjector;
+import co.aospa.android.customization.module.ParanoidThemePickerInjector;
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp(Application::class)
-class AospaCustomizationPickerApplication : Hilt_AospaCustomizationPickerApplication() {
+class ParanoidCustomizationPickerApplication : Hilt_ParanoidCustomizationPickerApplication() {
 
   @Inject
-  lateinit var injector: AospaThemePickerInjector
+  lateinit var injector: ParanoidThemePickerInjector
 
     override fun onCreate() {
         super.onCreate()
