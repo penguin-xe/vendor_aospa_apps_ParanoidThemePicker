@@ -33,7 +33,6 @@ import android.widget.ImageView;
 
 import androidx.core.graphics.ColorUtils;
 
-import com.android.customization.model.theme.ThemeBundle;
 import com.android.wallpaper.R;
 import com.android.wallpaper.util.ResourceUtils;
 
@@ -41,42 +40,65 @@ import com.android.customization.model.CustomizationManager;
 import com.android.customization.model.CustomizationOption;
 import com.android.customization.model.theme.OverlayManagerCompat;
 
+import co.aospa.android.customization.model.theme.ShapeAppIcon;
+
 import java.util.List;
 import java.util.Objects;
 
 public class IconShapeOption implements CustomizationOption<IconShapeOption> {
 
-    private final Drawable mShape;
-    private final List<ThemeBundle.PreviewInfo.ShapeAppIcon> mAppIcons;
+    private final LayerDrawable mShape;
+    private final List<ShapeAppIcon> mAppIcons;
     private final String mTitle;
     private final String mOverlayPackage;
     private final Path mPath;
+    private final int mCornerRadius;
     private int[] mShapeIconIds = {
             R.id.shape_preview_icon_0, R.id.shape_preview_icon_1, R.id.shape_preview_icon_2,
             R.id.shape_preview_icon_3, R.id.shape_preview_icon_4, R.id.shape_preview_icon_5
     };
 
-    public IconShapeOption(String packageName, String title, Path path, Drawable shapeDrawable,
-                           List<ThemeBundle.PreviewInfo.ShapeAppIcon> appIcons) {
+    public IconShapeOption(String packageName, String title, Path path,
+                           @Dimension int cornerRadius, Drawable shapeDrawable,
+                           List<ShapeAppIcon> appIcons) {
         mOverlayPackage = packageName;
         mTitle = title;
         mAppIcons = appIcons;
         mPath = path;
-        mShape = shapeDrawable.getConstantState().newDrawable();
+        mCornerRadius = cornerRadius;
+        Drawable background = shapeDrawable.getConstantState().newDrawable();
+        Drawable foreground = shapeDrawable.getConstantState().newDrawable();
+        mShape = new LayerDrawable(new Drawable[]{background, foreground});
+        mShape.setLayerGravity(0, Gravity.CENTER);
+        mShape.setLayerGravity(1, Gravity.CENTER);
     }
 
     @Override
     public void bindThumbnailTile(View view) {
+        Resources res = view.getContext().getResources();
         int resId = R.id.icon_section_tile;
-        boolean isSectionView = true;
         if (view.findViewById(R.id.shape_thumbnail) != null) {
             resId = R.id.shape_thumbnail;
-            isSectionView = false;
         }
 
-        mShape.setTint(view.getContext().getResources().getColor(
-                view.isActivated() || isSectionView ? R.color.system_on_surface
-                : R.color.system_on_surface_variant));
+        Resources.Theme theme = view.getContext().getTheme();
+        int borderWidth = 2 * res.getDimensionPixelSize(R.dimen.option_border_width);
+
+        Drawable background = mShape.getDrawable(0);
+        background.setTintList(res.getColorStateList(R.color.option_border_color, theme));
+
+        ShapeDrawable foreground = (ShapeDrawable) mShape.getDrawable(1);
+
+        foreground.setIntrinsicHeight(background.getIntrinsicHeight() - borderWidth);
+        foreground.setIntrinsicWidth(background.getIntrinsicWidth() - borderWidth);
+        TypedArray ta = view.getContext().obtainStyledAttributes(
+                new int[]{android.R.attr.colorPrimary});
+        int primaryColor = ta.getColor(0, 0);
+        ta.recycle();
+        int foregroundColor =
+                ResourceUtils.getColorAttr(view.getContext(), android.R.attr.textColorPrimary);
+
+        foreground.setTint(ColorUtils.blendARGB(primaryColor, foregroundColor, .05f));
 
         ((ImageView) view.findViewById(resId)).setImageDrawable(mShape);
         view.setContentDescription(mTitle);

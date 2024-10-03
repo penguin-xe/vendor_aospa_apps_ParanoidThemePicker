@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <co.aospa.android.customization.picker.iconpack.IconPackSectionView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:background="?selectableItemBackground"
-    android:clickable="true"
-    android:paddingVertical="@dimen/option_section_vertical_padding"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/section_bottom_padding"
     android:paddingHorizontal="@dimen/section_horizontal_padding"
-    android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/icon_pack_title"
+            android:text="@string/preview_name_icon"
             style="@style/SectionTitleTextStyle" />
 
         <TextView
@@ -34,7 +31,6 @@
         android:layout_width="@dimen/option_tile_width"
         android:layout_height="@dimen/option_tile_width"
         android:scaleType="center"
-        android:tint="@color/system_on_surface"
-        android:background="@drawable/picker_section_icon_background"/>
+        android:background="@drawable/option_border_color" />
 
 </co.aospa.android.customization.picker.iconpack.IconPackSectionView>

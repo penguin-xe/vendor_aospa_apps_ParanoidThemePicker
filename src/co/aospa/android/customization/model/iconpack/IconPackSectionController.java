@@ -96,7 +96,7 @@ public class IconPackSectionController implements CustomizationSectionController
         }, /* reload= */ true);
 
         iconPackSectionView.setOnClickListener(v -> mSectionNavigationController.navigateTo(
-                IconPackFragment.newInstance(context.getString(R.string.icon_pack_title))));
+                IconPackFragment.newInstance(context.getString(R.string.preview_name_icon))));
 
         return iconPackSectionView;
     }

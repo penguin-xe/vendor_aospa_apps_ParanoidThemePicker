@@ -95,7 +95,7 @@ public class FontSectionController implements CustomizationSectionController<Fon
         }, /* reload= */ true);
 
         fontSectionView.setOnClickListener(v -> mSectionNavigationController.navigateTo(
-                FontFragment.newInstance(context.getString(R.string.font_title))));
+                FontFragment.newInstance(context.getString(R.string.preview_name_font))));
 
         return fontSectionView;
     }
